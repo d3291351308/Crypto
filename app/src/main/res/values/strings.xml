@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">My Application</string>
+
+    <string name="wallet_title">crypto.com|DeFi Wallet</string>
+    <string name="wallet">Wallet</string>
+    <string name="defi">DeFi</string>
+</resources>

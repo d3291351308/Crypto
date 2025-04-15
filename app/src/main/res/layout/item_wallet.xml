@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <!-- 币种图标 -->
+    <ImageView
+        android:id="@+id/ivCurrencyIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true" />
+
+    <!-- 币种名称和符号 -->
+    <TextView
+        android:id="@+id/tvCurrencyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@+id/ivCurrencyIcon"
+        android:ellipsize="end"
+        android:maxWidth="160dp"
+        android:maxLines="1"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Etherasdkljasdasdasasdd" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true">
+
+        <RelativeLayout
+            android:id="@+id/rlBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <!-- 美元价值 -->
+            <TextView
+                android:id="@+id/tvUsdValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/tvUsdValueUnit"
+                android:ellipsize="end"
+                android:maxWidth="150dp"
+                android:maxLines="1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="1123987121928739" />
+
+            <TextView
+                android:id="@+id/tvUsdValueUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
+                android:maxWidth="30dp"
+                android:maxLines="1"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="BAT" />
+
+        </RelativeLayout>
+
+        <!-- 本地余额 -->
+        <TextView
+            android:id="@+id/tvUSBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlBalance"
+            android:layout_alignParentEnd="true"
+            android:ellipsize="end"
+            android:maxWidth="150dp"
+            android:maxLines="1"
+            tools:text="BATasdlkajsdlkjaasdasdsdasd" />
+
+    </RelativeLayout>
+</RelativeLayout>
