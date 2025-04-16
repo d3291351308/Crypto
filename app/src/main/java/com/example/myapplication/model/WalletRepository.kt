@@ -40,6 +40,8 @@ class WalletRepository(
                 }
             }
             items.sortedByDescending { it.usdValue }
+
+            //下面以钱包中的余额的货币维度展示
 //            for (balance in balanceRep.wallet) {
 //                val currency = currencyRep.currencies.find { it.coin_id == balance.currencyId }
 //                val rate = rateRep.tiers.find { it.currencyId == balance.currencyId }

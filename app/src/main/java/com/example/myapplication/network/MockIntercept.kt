@@ -29,10 +29,6 @@ class MockInterceptor(private val context: Context) : Interceptor {
     }
 }
 
-fun String.toResponseBody(contentType: MediaType?): ResponseBody {
-    return this.toByteArray().toResponseBody(contentType)
-}
-
 fun getMockResponseFromRaw(context: Context, @RawRes resId: Int): String? {
     return try {
         context.resources.openRawResource(resId).bufferedReader().use { it.readText() }

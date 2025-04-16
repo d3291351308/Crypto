@@ -27,6 +27,7 @@ class RetrofitClient private constructor(context: Context) {
         }
     }
 
+    //todo debug调试MockInterceptor
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(MockInterceptor(context))
         .connectTimeout(30, TimeUnit.SECONDS)

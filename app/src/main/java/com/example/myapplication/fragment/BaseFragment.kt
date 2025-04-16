@@ -31,9 +31,11 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     }
 
     protected fun showLoading(show: Boolean) {
+        //todo
     }
 
     protected fun showError(message: String?) {
+        //todo
     }
 
     protected abstract fun createBinding(inflater: LayoutInflater, container: ViewGroup?): VB
