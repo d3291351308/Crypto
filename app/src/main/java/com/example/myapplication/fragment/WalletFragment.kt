@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,51 +15,36 @@ import com.example.myapplication.network.RetrofitClient
 import com.example.myapplication.vm.WalletViewModel
 import com.example.myapplication.vm.WalletViewModelFactory
 
-class WalletFragment : Fragment() {
-    private var _binding: WalletFragmentBinding? = null
-    private val binding get() = _binding!!
+class WalletFragment : BaseFragment<WalletFragmentBinding>() {
     private lateinit var viewModel: WalletViewModel
-
     private val adapter = WalletAdapter()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = WalletFragmentBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         // 使用工厂创建 ViewModel 实例
         viewModel = ViewModelProvider(
             requireActivity(), WalletViewModelFactory(
                 WalletRepository(
                     RetrofitClient.getInstance(requireActivity()).currencyService,
                     RetrofitClient.getInstance(requireActivity()).walletService,
-                    RetrofitClient.getInstance(requireActivity()).rateService)
+                    RetrofitClient.getInstance(requireActivity()).rateService
+                )
             )
         )[WalletViewModel::class.java]
-
-        initView()
-        setupObservers()
 
         if (savedInstanceState == null) {
             viewModel.loadData()
         }
+
+        super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun initView() {
+    override fun initView() {
         binding.rvCryptoList.apply {
             adapter = this@WalletFragment.adapter
             layoutManager = LinearLayoutManager(requireActivity())
             addItemDecoration(
                 DividerItemDecoration(
-                    requireContext(),
-                    DividerItemDecoration.VERTICAL
+                    requireContext(), DividerItemDecoration.VERTICAL
                 )
             )
             setHasFixedSize(true)
@@ -71,7 +55,7 @@ class WalletFragment : Fragment() {
         }
     }
 
-    private fun setupObservers() {
+    override fun setupObservers() {
         viewModel.currencyItems.observe(viewLifecycleOwner) { items ->
             adapter.updateItems(items)
             binding.tvEmptyView.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
@@ -88,8 +72,7 @@ class WalletFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): WalletFragmentBinding {
+        return WalletFragmentBinding.inflate(inflater, container, false)
     }
 }
