@@ -27,6 +27,7 @@ class WalletViewModel(
 
     private val refreshRunnable = object : Runnable {
         override fun run() {
+            loadData()
             handler.postDelayed(this, 1000) // 刷新
         }
     }
@@ -34,11 +35,10 @@ class WalletViewModel(
     private val handler = Handler(Looper.getMainLooper())
 
     init {
-        loadData()
         handler.post(refreshRunnable)
     }
 
-    private fun loadData() {
+    fun loadData() {
         _error.value = null
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -57,10 +57,6 @@ class WalletViewModel(
                 }
             }
         }
-    }
-
-    fun clearError() {
-        _error.value = null
     }
 
     override fun onCleared() {

@@ -580,7 +580,7 @@
       "to_currency": "USD",
       "rates": [
         {
-          "amount": "1000",
+          "amount": "1000asd",
           "rate": "10603.900000"
         }
       ],

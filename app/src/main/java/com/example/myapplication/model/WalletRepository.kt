@@ -22,7 +22,7 @@ class WalletRepository(
             val items = mutableListOf<WalletItem>()
 
             for (currency in currencyRep.currencies) {
-                val balance = balanceRep.wallet.find { it.currencyId == currency.coin_id }
+                val balance = balanceRep.wallet?.find { it.currencyId == currency.coin_id }
                 val rate = rateRep.tiers.find { it.currencyId == currency.coin_id }
 
                 if (balance != null && rate != null) {
@@ -30,13 +30,13 @@ class WalletRepository(
                         currency = WalletCurrency(
                             id = currency.coin_id, name = currency.name, symbol = currency.symbol, imageUrl = currency.imageUrl
                         ), balance = WalletBalance(
-                            currencyId = balance.currencyId, amount = balance.amount
+                            currencyId = balance.currencyId, amount = balance.amount?.toDoubleOrNull() ?: 0.0
                         ), rate = LiveRate(
                             currencyId = rate.currencyId, usdRate = rate.rates
-                        )
+                        ), usdValue = (balance.amount?.toDoubleOrNull() ?: 0.0) * (rate.rates?.getOrNull(0)?.rate?.toDoubleOrNull() ?: 0.0) // 计算出的美元价值
                     )
                     items.add(item)
-                    cachedItems[balance.currencyId] = item
+                    cachedItems[balance.currencyId ?: ""] = item
                 }
             }
             items.sortedByDescending { it.usdValue }

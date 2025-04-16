@@ -37,22 +37,26 @@ class WalletFragment : Fragment() {
 
         // 使用工厂创建 ViewModel 实例
         viewModel = ViewModelProvider(
-            this, WalletViewModelFactory(
+            requireActivity(), WalletViewModelFactory(
                 WalletRepository(
-                    RetrofitClient.getInstance(requireContext()).currencyService,
-                    RetrofitClient.getInstance(requireContext()).walletService,
-                    RetrofitClient.getInstance(requireContext()).rateService)
+                    RetrofitClient.getInstance(requireActivity()).currencyService,
+                    RetrofitClient.getInstance(requireActivity()).walletService,
+                    RetrofitClient.getInstance(requireActivity()).rateService)
             )
         )[WalletViewModel::class.java]
 
-        setupRecyclerView()
+        initView()
         setupObservers()
+
+        if (savedInstanceState == null) {
+            viewModel.loadData()
+        }
     }
 
-    private fun setupRecyclerView() {
+    private fun initView() {
         binding.rvCryptoList.apply {
             adapter = this@WalletFragment.adapter
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = LinearLayoutManager(requireActivity())
             addItemDecoration(
                 DividerItemDecoration(
                     requireContext(),
@@ -61,11 +65,15 @@ class WalletFragment : Fragment() {
             )
             setHasFixedSize(true)
         }
+
+        binding.tvEmptyView.setOnClickListener {
+            viewModel.loadData()
+        }
     }
 
     private fun setupObservers() {
         viewModel.currencyItems.observe(viewLifecycleOwner) { items ->
-            adapter.submitList(items)
+            adapter.updateItems(items)
             binding.tvEmptyView.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
         }
 
@@ -76,7 +84,6 @@ class WalletFragment : Fragment() {
         viewModel.error.observe(viewLifecycleOwner) { error ->
             error?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                viewModel.clearError() // 清除错误状态
             }
         }
     }

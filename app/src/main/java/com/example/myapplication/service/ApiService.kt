@@ -12,10 +12,10 @@ interface CurrencyApiService {
     )
 
     data class WalletCurrencyItem(
-            val coin_id: String,
-            val name: String,
-            val symbol: String,
-            @SerializedName("colorful_image_url") val imageUrl: String
+            val coin_id: String?,
+            val name: String?,
+            val symbol: String?,
+            @SerializedName("colorful_image_url") val imageUrl: String?
     )
 }
 
@@ -24,12 +24,12 @@ interface WalletApiService {
     suspend fun getWalletBalances(): WalletBalanceResponse
 
     data class WalletBalanceResponse(
-        val wallet: List<CurrencyBalanceItem>
+        val wallet: List<CurrencyBalanceItem>?
     )
 
     data class CurrencyBalanceItem(
-            @SerializedName("currency") val currencyId: String,
-            val amount: Double
+            @SerializedName("currency") val currencyId: String?,
+            val amount: String?
     )
 }
 
@@ -42,12 +42,12 @@ interface ExchangeRateApiService {
     )
 
     data class LiveRate(
-            @SerializedName("from_currency") val currencyId: String,
-            val rates: List<Rate>
+            @SerializedName("from_currency") val currencyId: String?,
+            val rates: List<Rate>?
     )
 
     data class Rate(
-        val amount: Int,
-        val rate: Double
+        val amount: String?,
+        val rate: String?
     )
 }
