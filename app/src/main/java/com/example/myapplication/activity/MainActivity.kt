@@ -23,22 +23,31 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavigation() {
         val navView: BottomNavigationView = binding.bottomNavigation
 
+        selectFirstFragment()
          navView.setOnNavigationItemSelectedListener { item ->
              when (item.itemId) {
                  R.id.navigation_wallet -> {
-                     supportFragmentManager.beginTransaction()
-                         .replace(R.id.fragment_container, WalletFragment())
-                         .commit()
+                     selectFirstFragment()
                      true
                  }
                  R.id.navigation_market -> {
-                     supportFragmentManager.beginTransaction()
-                         .replace(R.id.fragment_container, EmptyFragment())
-                         .commit()
+                     selectSecFragment()
                      true
                  }
                  else -> false
              }
          }
+    }
+
+    private fun selectFirstFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, WalletFragment())
+            .commit()
+    }
+
+    private fun selectSecFragment() {
+        supportFragmentManager.beginTransaction()
+           .replace(R.id.fragment_container, EmptyFragment())
+           .commit()
     }
 }

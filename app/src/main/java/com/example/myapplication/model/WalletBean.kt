@@ -1,5 +1,8 @@
 package com.example.myapplication.model
 
+import com.example.myapplication.service.ExchangeRateApiService
+import kotlin.time.times
+
 data class WalletCurrency(
     val id: String,          // 币种ID (如 "bitcoin")
     val name: String,        // 币种名称 (如 "Bitcoin")
@@ -14,12 +17,12 @@ data class WalletBalance(
 
 data class LiveRate(
     val currencyId: String,  // 匹配CryptoCurrency的id
-    val usdRate: Double,     // 对美元汇率
+    val usdRate: List<ExchangeRateApiService.Rate>,     // 对美元汇率
 )
 
 data class WalletItem(
     val currency: WalletCurrency,
     val balance: WalletBalance,
     val rate: LiveRate,
-    val usdValue: Double = balance.amount * rate.usdRate // 计算出的美元价值
+    val usdValue: Double = balance.amount * (rate.usdRate.getOrNull(0)?.rate ?: 0.0) // 计算出的美元价值
 )

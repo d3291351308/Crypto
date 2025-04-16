@@ -2,39 +2,52 @@ package com.example.myapplication.service
 
 import com.google.gson.annotations.SerializedName
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface CurrencyApiService {
-    @GET("coins/markets")
-    suspend fun getWalletCurrencies(
-        @Query("vs_currency") vsCurrency: String = "usd",
-        @Query("ids") ids: String? = null
-    ): List<WalletCurrencyResponse>
+    @GET("currencies/list")
+    suspend fun getWalletCurrencies(): WalletCurrencyResponse
 
     data class WalletCurrencyResponse(
-        val id: String,
-        val name: String,
-        val symbol: String,
-        @SerializedName("image") val imageUrl: String
+        val currencies: List<WalletCurrencyItem>
+    )
+
+    data class WalletCurrencyItem(
+            val coin_id: String,
+            val name: String,
+            val symbol: String,
+            @SerializedName("colorful_image_url") val imageUrl: String
     )
 }
 
 interface WalletApiService {
     @GET("wallet/balances")
-    suspend fun getWalletBalances(): List<WalletBalanceResponse>
+    suspend fun getWalletBalances(): WalletBalanceResponse
 
     data class WalletBalanceResponse(
-        @SerializedName("currency_id") val currencyId: String,
-        val amount: Double
+        val wallet: List<CurrencyBalanceItem>
+    )
+
+    data class CurrencyBalanceItem(
+            @SerializedName("currency") val currencyId: String,
+            val amount: Double
     )
 }
 
 interface ExchangeRateApiService {
-    @GET("live-rates")
-    suspend fun getLiveRates(): List<LiveRateResponse>
+    @GET("live/rates")
+    suspend fun getLiveRates(): LiveRateResponse
 
     data class LiveRateResponse(
-        @SerializedName("currency_id") val currencyId: String,
-        @SerializedName("usd_rate") val usdRate: Double
+        val tiers: List<LiveRate>
+    )
+
+    data class LiveRate(
+            @SerializedName("from_currency") val currencyId: String,
+            val rates: List<Rate>
+    )
+
+    data class Rate(
+        val amount: Int,
+        val rate: Double
     )
 }

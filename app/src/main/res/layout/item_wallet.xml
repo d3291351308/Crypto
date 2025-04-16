@@ -38,10 +38,10 @@
             android:layout_height="wrap_content">
             <!-- 美元价值 -->
             <TextView
-                android:id="@+id/tvUsdValue"
+                android:id="@+id/tvUSBalance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@+id/tvUsdValueUnit"
+                android:layout_toStartOf="@+id/tvUSBalanceUnit"
                 android:ellipsize="end"
                 android:maxWidth="150dp"
                 android:maxLines="1"
@@ -50,7 +50,7 @@
                 tools:text="1123987121928739" />
 
             <TextView
-                android:id="@+id/tvUsdValueUnit"
+                android:id="@+id/tvUSBalanceUnit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -66,7 +66,7 @@
 
         <!-- 本地余额 -->
         <TextView
-            android:id="@+id/tvUSBalance"
+            android:id="@+id/tvUsdValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rlBalance"

@@ -6,10 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.adapter.WalletAdapter
@@ -18,7 +15,6 @@ import com.example.myapplication.model.WalletRepository
 import com.example.myapplication.network.RetrofitClient
 import com.example.myapplication.vm.WalletViewModel
 import com.example.myapplication.vm.WalletViewModelFactory
-import kotlinx.coroutines.launch
 
 class WalletFragment : Fragment() {
     private var _binding: WalletFragmentBinding? = null
@@ -43,13 +39,14 @@ class WalletFragment : Fragment() {
         viewModel = ViewModelProvider(
             this, WalletViewModelFactory(
                 WalletRepository(
-                )
+                    RetrofitClient.getInstance(requireContext()).currencyService,
+                    RetrofitClient.getInstance(requireContext()).walletService,
+                    RetrofitClient.getInstance(requireContext()).rateService)
             )
         )[WalletViewModel::class.java]
 
         setupRecyclerView()
         setupObservers()
-        setupRefresh()
     }
 
     private fun setupRecyclerView() {
@@ -67,12 +64,21 @@ class WalletFragment : Fragment() {
     }
 
     private fun setupObservers() {
-    }
+        viewModel.currencyItems.observe(viewLifecycleOwner) { items ->
+            adapter.submitList(items)
+            binding.tvEmptyView.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+        }
 
-    private fun setupRefresh() {
-//        binding.swipeRefresh.setOnRefreshListener {
-//            viewModel.refresh()
-//        }
+        viewModel.totalValue.observe(viewLifecycleOwner) { total ->
+            binding.tvTotalBalance.text = "$${"%.4f".format(total)}"
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            error?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                viewModel.clearError() // 清除错误状态
+            }
+        }
     }
 
     override fun onDestroyView() {

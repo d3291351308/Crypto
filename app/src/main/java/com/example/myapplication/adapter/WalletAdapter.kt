@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.databinding.ItemWalletBinding
 import com.example.myapplication.model.WalletItem
+import com.example.myapplication.util.DecimalFormatUtil
 
 class WalletAdapter : ListAdapter<WalletItem, WalletAdapter.ViewHolder>(DiffCallback()) {
 
@@ -17,17 +18,12 @@ class WalletAdapter : ListAdapter<WalletItem, WalletAdapter.ViewHolder>(DiffCall
 
         fun bind(item: WalletItem) {
             // 加载图标
-            Glide.with(binding.root)
-                .load(item.currency.imageUrl)
-                .circleCrop()
-                .into(binding.ivCurrencyIcon)
+            Glide.with(binding.root).load(item.currency.imageUrl).circleCrop().into(binding.ivCurrencyIcon)
 
             binding.tvCurrencyName.text = item.currency.name
-
             // 显示本地余额和美元价值
-            binding.tvUSBalance.text = "%.8f ${item.currency.symbol.uppercase()}"
-                .format(item.balance.amount)
-            binding.tvUsdValue.text = "≈$%.2f".format(item.usdValue)
+            binding.tvUSBalance.text = DecimalFormatUtil().formatDecimal(item.balance.amount) + " " + item.currency.symbol.uppercase()
+            binding.tvUsdValue.text = "$" + DecimalFormatUtil().formatDecimal(item.usdValue)
         }
     }
 
@@ -43,9 +39,7 @@ class WalletAdapter : ListAdapter<WalletItem, WalletAdapter.ViewHolder>(DiffCall
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemWalletBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
         return ViewHolder(binding)
     }
