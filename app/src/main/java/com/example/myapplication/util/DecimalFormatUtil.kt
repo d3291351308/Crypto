@@ -7,6 +7,7 @@ import java.text.DecimalFormat
  */
 class DecimalFormatUtil {
     fun formatDecimal(number: Double): String {
+
         val decimalFormat = DecimalFormat("#.########")
         return decimalFormat.format(number)
     }
